@@ -132,7 +132,7 @@ class WorldManager(private val plugin: Gamesys) {
                 ) * (180.0 / Math.PI)).toFloat()
                 lobbyLocation.pitch = 0f
 
-                worldEditWorld.setBlock(lobbySpawn.blockX, lobbySpawn.blockY, lobbySpawn.blockZ, BlockTypes.AIR?.defaultState)
+                worldEditWorld.setBlock(BlockVector3.at(lobbySpawn.blockX, lobbySpawn.blockY, lobbySpawn.blockZ), BlockTypes.AIR?.defaultState)
 
                 plugin.logger.logInfo("Lobby for arena ${game.arena.name} pasted at ${lobbyOrigin.blockX} ${lobbyOrigin.blockY} ${lobbyOrigin.blockZ} (${(System.currentTimeMillis() - now)}ms)")
                 plugin.logger.logInfo("Pasting arena ${game.arena.name}")
@@ -147,7 +147,7 @@ class WorldManager(private val plugin: Gamesys) {
                 )
 
                 game.getSpawnLocations().forEach {
-                    worldEditWorld.setBlock(it.blockX, it.blockY, it.blockZ, BlockTypes.AIR?.defaultState)
+                    worldEditWorld.setBlock(BlockVector3.at(it.blockX, it.blockY, it.blockZ), BlockTypes.AIR?.defaultState)
                 }
 
                 object : BukkitRunnable() {
@@ -159,6 +159,7 @@ class WorldManager(private val plugin: Gamesys) {
                 plugin.logger.logInfo("Arena ${game.arena.name} pasted at ${arenaOrigin.blockX} ${arenaOrigin.blockY} ${arenaOrigin.blockZ} (${(System.currentTimeMillis() - now)}ms)")
 
             } catch (e: Exception) {
+                e.printStackTrace()
                 Bukkit.broadcastMessage("Unable to paste arena.")
             }
         }

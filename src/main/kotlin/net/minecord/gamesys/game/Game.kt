@@ -14,7 +14,7 @@ import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
-import org.bukkit.craftbukkit.v1_20_R2.boss.CraftBossBar
+import org.bukkit.boss.BossBar
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.scheduler.BukkitRunnable
@@ -27,7 +27,7 @@ open class Game(open val plugin: Gamesys, open val arena: Arena) {
     var startCountdownCounter = 0
     var invinciblePlayers = true
     protected val locations = hashMapOf<String, MutableList<Location>>()
-    protected val bar: CraftBossBar by lazy { CraftBossBar("&f&lWaiting for &e&l${getMinimumPlayersToStartCountdown()} &f&lmore players".colored(), BarColor.WHITE, BarStyle.SEGMENTED_12) }
+    protected val bar: BossBar by lazy { Bukkit.createBossBar("&f&lWaiting for &e&l${getMinimumPlayersToStartCountdown()} &f&lmore players".colored(), BarColor.WHITE, BarStyle.SEGMENTED_12) }
     protected val sidebar: GameSidebar by lazy { plugin.system.createGameSidebar(plugin, this) }
     lateinit var lobbyLocation: Location
 

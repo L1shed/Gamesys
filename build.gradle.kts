@@ -16,7 +16,10 @@ dependencies {
     compileOnly("io.papermc.paper", "paper-api", "1.20.2-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldedit", "worldedit-core", "7.3.0-SNAPSHOT")
     compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.3.0-SNAPSHOT")
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.9.0")
+//    compileOnly("com.onarandombox.multiversecore", "Multiverse-Core", "4.3.12")
     compileOnly("com.gmail.filoghost.holographicdisplays", "holographicdisplays-api", "2.4.0")
+    compileOnly("com.mojang","authlib","3.16.29")
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }
 
