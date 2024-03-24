@@ -14,6 +14,7 @@ import com.sk89q.worldedit.function.operation.Operations
 import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.session.ClipboardHolder
 import com.sk89q.worldedit.world.block.BlockTypes
+import net.kyori.adventure.text.Component
 import net.minecord.gamesys.Gamesys
 import net.minecord.gamesys.game.Game
 import net.minecord.gamesys.game.GameStatus
@@ -87,16 +88,16 @@ class WorldManager(private val plugin: Gamesys) {
             val clipboard =
                 ClipboardFormats.findByFile(lobbyFile)?.getReader(lobbyFile.inputStream())?.read() ?: return@runTaskAsynchronously
 
-            for (y in clipboard.minimumPoint.blockY..clipboard.maximumPoint.blockY) {
-                for (x in clipboard.minimumPoint.blockX..clipboard.maximumPoint.blockX) {
-                    for (z in clipboard.minimumPoint.blockZ..clipboard.maximumPoint.blockZ) {
+            for (y in clipboard.minimumPoint.y()..clipboard.maximumPoint.y()) {
+                for (x in clipboard.minimumPoint.x()..clipboard.maximumPoint.x()) {
+                    for (z in clipboard.minimumPoint.z()..clipboard.maximumPoint.z()) {
                         val blockState = clipboard.getBlock(BlockVector3.at(x, y, z))
                         if (blockState.blockType == BlockTypes.WHITE_GLAZED_TERRACOTTA) {
                             lobbySpawnLocation = Vector(x, y, z).subtract(
                                 Vector(
-                                    clipboard.origin.x,
-                                    clipboard.origin.y,
-                                    clipboard.origin.z
+                                    clipboard.origin.x(),
+                                    clipboard.origin.y(),
+                                    clipboard.origin.z()
                                 )
                             )
                             plugin.logger.logInfo("Lobby schematic analyzed in ${(System.currentTimeMillis() - now)}ms")
@@ -112,10 +113,10 @@ class WorldManager(private val plugin: Gamesys) {
 
     fun loadGame(game: Game) {
         val arenaOrigin = BlockVector3.at(lastX + (biggestArenaSize/2) + border, pasteHeight, 0)
-        lastX = arenaOrigin.blockX
+        lastX = arenaOrigin.x()
 
         val lobbyOrigin = BlockVector3.at(0, pasteHeight, lastZ + border)
-        lastZ = lobbyOrigin.blockZ
+        lastZ = lobbyOrigin.z()
 
         TaskManager.taskManager().async {
             try {
@@ -125,16 +126,16 @@ class WorldManager(private val plugin: Gamesys) {
                 pasteSchematic(lobbyFile, lobbyOrigin)
 
                 val lobbySpawn = lobbyOrigin.add(lobbySpawnLocation.blockX, lobbySpawnLocation.blockY, lobbySpawnLocation.blockZ)
-                val lobbyLocation = Location(bukkitWorld, lobbySpawn.x.toDouble(), lobbySpawn.y.toDouble(), lobbySpawn.z.toDouble())
+                val lobbyLocation = Location(bukkitWorld, lobbySpawn.x().toDouble(), lobbySpawn.y().toDouble(), lobbySpawn.z().toDouble())
                 lobbyLocation.yaw = (atan2(
-                    y = -(lobbyOrigin.x - lobbyLocation.x),
-                    x = lobbyOrigin.z - lobbyLocation.z
+                    y = -(lobbyOrigin.x() - lobbyLocation.x),
+                    x = lobbyOrigin.z() - lobbyLocation.z
                 ) * (180.0 / Math.PI)).toFloat()
                 lobbyLocation.pitch = 0f
 
-                worldEditWorld.setBlock(BlockVector3.at(lobbySpawn.blockX, lobbySpawn.blockY, lobbySpawn.blockZ), BlockTypes.AIR?.defaultState)
+                worldEditWorld.setBlock(BlockVector3.at(lobbySpawn.x(), lobbySpawn.y(), lobbySpawn.z()), BlockTypes.AIR?.defaultState)
 
-                plugin.logger.logInfo("Lobby for arena ${game.arena.name} pasted at ${lobbyOrigin.blockX} ${lobbyOrigin.blockY} ${lobbyOrigin.blockZ} (${(System.currentTimeMillis() - now)}ms)")
+                plugin.logger.logInfo("Lobby for arena ${game.arena.name} pasted at ${lobbyOrigin.x()} ${lobbyOrigin.y()} ${lobbyOrigin.z()} (${(System.currentTimeMillis() - now)}ms)")
                 plugin.logger.logInfo("Pasting arena ${game.arena.name}")
 
                 now = System.currentTimeMillis()
@@ -142,7 +143,7 @@ class WorldManager(private val plugin: Gamesys) {
 
                 game.onArenaLoaded(
                     worldEditWorld,
-                    Location(bukkitWorld, arenaOrigin.x.toDouble(), arenaOrigin.y.toDouble(), arenaOrigin.z.toDouble()),
+                    Location(bukkitWorld, arenaOrigin.x().toDouble(), arenaOrigin.y().toDouble(), arenaOrigin.z().toDouble()),
                     lobbyLocation
                 )
 
@@ -156,11 +157,11 @@ class WorldManager(private val plugin: Gamesys) {
                     }
                 }.runTask(plugin)
 
-                plugin.logger.logInfo("Arena ${game.arena.name} pasted at ${arenaOrigin.blockX} ${arenaOrigin.blockY} ${arenaOrigin.blockZ} (${(System.currentTimeMillis() - now)}ms)")
+                plugin.logger.logInfo("Arena ${game.arena.name} pasted at ${arenaOrigin.x()} ${arenaOrigin.y()} ${arenaOrigin.z()} (${(System.currentTimeMillis() - now)}ms)")
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Bukkit.broadcastMessage("Unable to paste arena.")
+                Bukkit.broadcast(Component.text("Unable to paste arena."))
             }
         }
     }
