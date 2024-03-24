@@ -47,13 +47,13 @@ class ArenaManager(private val plugin: Gamesys) {
                 locations[string] = arrayListOf()
             }
 
-            for (y in clipboard.minimumPoint.blockY..clipboard.maximumPoint.blockY) {
-                for (x in clipboard.minimumPoint.blockX..clipboard.maximumPoint.blockX) {
-                    for (z in clipboard.minimumPoint.blockZ..clipboard.maximumPoint.blockZ) {
+            for (y in clipboard.minimumPoint.y()..clipboard.maximumPoint.y()) {
+                for (x in clipboard.minimumPoint.x()..clipboard.maximumPoint.x()) {
+                    for (z in clipboard.minimumPoint.z()..clipboard.maximumPoint.z()) {
                         for ((string, block) in mapping) {
                             val blockState = clipboard.getBlock(BlockVector3.at(x, y, z))
                             if (blockState.blockType == block) {
-                                locations[string]?.add(Vector(x, y, z).subtract(Vector(clipboard.origin.x, clipboard.origin.y, clipboard.origin.z)))
+                                locations[string]?.add(Vector(x, y, z).subtract(Vector(clipboard.origin.x(), clipboard.origin.y(), clipboard.origin.z())))
                             }
                         }
                     }
