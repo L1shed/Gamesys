@@ -79,7 +79,7 @@ class ArenaManager(private val plugin: Gamesys) {
         val map = hashMapOf<String, BlockType>()
 
         for ((string, material) in plugin.system.getArenaBlockMapping()) {
-            map[string] = BlockTypes.get(material.toString().toLowerCase())!!
+            map[string] = BlockTypes.get(material.toString().lowercase())!!
         }
 
         return map

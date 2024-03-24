@@ -1,5 +1,6 @@
 package net.minecord.gamesys.game
 
+import net.kyori.adventure.text.Component
 import net.minecord.gamesys.Gamesys
 import net.minecord.gamesys.arena.Arena
 import net.minecord.gamesys.game.player.GamePlayer
@@ -215,7 +216,7 @@ open class Game(open val plugin: Gamesys, open val arena: Arena) {
         var countdown = getEndCountdown()
 
         if (winner != null) {
-            Bukkit.broadcastMessage("${plugin.system.getChatPrefix()} &7Player &e${winner.player.name} &7won the game in arena &b${arena.name}".colored())
+            Bukkit.broadcast(Component.text("${plugin.system.getChatPrefix()} &7Player &e${winner.player.name} &7won the game in arena &b${arena.name}".colored()))
         }
 
         object : BukkitRunnable() {
