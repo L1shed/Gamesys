@@ -26,6 +26,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
 import java.io.File
+import kotlin.io.path.DefaultCopyActionContext.copyToIgnoringExistingDirectory
 import kotlin.math.atan2
 
 class WorldManager(private val plugin: Gamesys) {
