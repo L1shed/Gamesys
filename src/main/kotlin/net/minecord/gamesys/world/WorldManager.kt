@@ -186,7 +186,7 @@ class WorldManager(private val plugin: Gamesys) {
     private fun loadWorld(): World {
         plugin.logger.logInfo("Loading world")
 
-//        deleteWorld()
+        deleteWorld()
 
         val now = System.currentTimeMillis()
         var world: World? = plugin.server.getWorld(worldName)
